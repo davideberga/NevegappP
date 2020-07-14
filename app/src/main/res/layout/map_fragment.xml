@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabPath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        app:backgroundTint="@color/WhiteSmoke"
+        app:srcCompat="@drawable/centro_mappa"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.982" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:backgroundTint="@color/WhiteSmoke"
+        app:srcCompat="@drawable/segnalino_posizione_attuale"
+        app:layout_constraintBottom_toBottomOf="@+id/mapView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.985" />
+
+    <!--suppress AndroidUnknownAttribute -->
+    <org.osmdroid.views.MapView
+        android:id="@+id/mapView"
+        tileSource="Mapnik"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent"></org.osmdroid.views.MapView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/sfondo_menu_spostamento"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/mapView"
+        app:layout_constraintEnd_toStartOf="@+id/fabPosition"
+        app:layout_constraintStart_toEndOf="@+id/fabPath">
+
+        <Button
+            android:id="@+id/bottoneIndietro"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/freccia_sinistra" />
+
+        <TextView
+            android:id="@+id/textViewPuntoAttuale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/pomegranate"
+            android:text="TextView" />
+
+        <Button
+            android:id="@+id/bottoneAvanti"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/freccia_destra" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -24,7 +24,7 @@ public class MyOnClickMarkerListener implements Marker.OnMarkerClickListener {
     @Override
     public boolean onMarkerClick(Marker marker, MapView mapView) {
         marker.showInfoWindow();
-        text.setText("Punto " + (puntoVisulizzato.getNumeroPunto()));
+        text.setText(String.valueOf(puntoVisulizzato.getNumeroPunto()));
         MapFragment.setPuntoAttuale(puntoVisulizzato.getNumeroPunto());
         return false;
     }

@@ -44,7 +44,7 @@ public class MyInfoWindow extends MarkerInfoWindow {
             textTitle.setText("Infopoint");
         }
         else{
-            textTitle.setText("Punto " + puntoDelMarker.getNumeroPunto());
+            textTitle.setText(String.valueOf(puntoDelMarker.getNumeroPunto()));
         }
         textDescription.setText(puntoDelMarker.getNomePunto());
         layout.setOnClickListener(new View.OnClickListener() {

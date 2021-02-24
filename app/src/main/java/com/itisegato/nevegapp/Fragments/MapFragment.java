@@ -37,6 +37,10 @@ import com.itisegato.nevegapp.GeneralClasses.Punto;
 import com.itisegato.nevegapp.R;
 import com.itisegato.nevegapp.Utilities.GpxParser;
 
+import egolabsapps.basicodemine.offlinemap.Interfaces.MapListener;
+import egolabsapps.basicodemine.offlinemap.Utils.MapUtils;
+import egolabsapps.basicodemine.offlinemap.Views.OfflineMapView;
+
 /**
  * Created by Davide on 17/01/2018.
  *
@@ -46,9 +50,11 @@ import com.itisegato.nevegapp.Utilities.GpxParser;
  *
  */
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements MapListener {
 
-    protected MapView map = null;
+    protected OfflineMapView offlineMap;
+    protected MapUtils mapUtils;
+    protected MapView map;
     protected IMapController controllore = null;
     protected GeoPoint currentLocation = null;
     protected GeoPoint centerOfPath = null;
@@ -76,183 +82,29 @@ public class MapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.map_fragment, container, false);
-
-        puntoAttuale=-1;
-        textPuntoSelezionato = v.findViewById(R.id.textViewPuntoAttuale);
-
-        provider = new GpsMyLocationProvider(getActivity().getBaseContext());
-        provider.addLocationSource(LocationManager.NETWORK_PROVIDER);
-        provider.setLocationUpdateMinTime(UPDATE_LOCATION_TIME);
-
-        BoundingBox box = new BoundingBox(NORTH, EAST, SOUTH, WEST);
-        map = v.findViewById(R.id.mapView);
-        map.setScrollableAreaLimitDouble(box);
         fabPosition = v.findViewById(R.id.fabPosition);
         btnIndietro = v.findViewById(R.id.bottoneIndietro);
         btnAvanti = v.findViewById(R.id.bottoneAvanti);
         fabPath = v.findViewById(R.id.fabPath);
-
-        controllore = map.getController();
-
-        // Recupero dello stato precedente
-
-        if(savedInstanceState!=null) {
-            if (savedInstanceState.getInt(SAVED_CENTER) != 0)
-                controllore.setZoom(savedInstanceState.getInt(SAVED_CENTER));
-            else
-                controllore.setZoom(14);
-            if (savedInstanceState.get(SAVED_CENTER) != null)
-                controllore.setCenter((GeoPoint) savedInstanceState.get(SAVED_CENTER));
-            else
-                controllore.setCenter(new GeoPoint(Double.parseDouble("46.0854235"), Double.parseDouble("12.3049762")));
-        }
-
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                map.setBuiltInZoomControls(false);
-                map.setMultiTouchControls(true);
-                map.setTileSource(TileSourceFactory.MAPNIK);
-                map.setUseDataConnection(true);
-                map.setVisibility(View.VISIBLE);
-                map.setMinZoomLevel(14);
-                mCopyrightOverlay = new CopyrightOverlay(getActivity());
-
-                map.getOverlays().add(mCopyrightOverlay);
-
-                myLocationNewOverlay = new MyLocationNewOverlay(provider,map);
-                myLocationNewOverlay.enableMyLocation();
-                myLocationNewOverlay.setDrawAccuracyEnabled(true);
-                map.getOverlays().add(myLocationNewOverlay);
-
-                ScaleBarOverlay mScaleBarOverlay = new ScaleBarOverlay(map);
-                mScaleBarOverlay.enableScaleBar();
-                map.getOverlays().add(mScaleBarOverlay);
-
-                // Disegno del percorso utilizzando il file gpx
-
-                Polyline line = new Polyline();
-                line.setColor(getResources().getColor(R.color.coloreAzzurroIcona));
-                line.setWidth(4.5f);
-                List<GeoPoint> pts = new ArrayList<>();
-                List<Location> puntiDelPercorso = GpxParser.decodeGPX("trkpt",getContext());
-
-                for(Location l : puntiDelPercorso){
-                    pts.add(new GeoPoint(l.getLatitude(), l.getLongitude()));
-                }
-
-                line.setPoints(pts);
-                line.setVisible(true);
-                line.setGeodesic(true);
-                map.getOverlays().add(line);
-
-                Marker infopoint = new Marker(map);
-                infopoint.setInfoWindow(new MyInfoWindow(R.layout.bonuspack_bubble, map, GeneraArrayPunti.getPUNTI()[0], getContext()));
-                infopoint.setIcon(getResources().getDrawable(R.drawable.marker_punto_blu));
-                infopoint.setPosition(new GeoPoint(46.092686, 12.281283));
-                infopoint.setInfoWindowAnchor(3f,0.25f);
-                map.getOverlays().add(infopoint);
-
-                // Disegno dei punti di interess lungo il percorso
-
-                final List<Location> wayPoints = GpxParser.decodeGPX("wpt", getContext());
-                listaMarker = new ArrayList<>();
-                for(int i=0; i<wayPoints.size();i++){
-                    Marker punto = new Marker(map);
-                    listaMarker.add(punto);
-                    punto.setPosition(new GeoPoint(wayPoints.get(i).getLatitude(),wayPoints.get(i).getLongitude()));
-                    if(i<13) {
-                        punto.setOnMarkerClickListener(new MyOnClickMarkerListener(GeneraArrayPunti.getPUNTI()[i+1],textPuntoSelezionato));
-                        punto.setRelatedObject(GeneraArrayPunti.getPUNTI()[i+1]);
-                    }
-                    punto.setInfoWindow(new MyInfoWindow(R.layout.bonuspack_bubble, map, (Punto)punto.getRelatedObject(), getContext()));
-                    punto.setInfoWindowAnchor(3f,0.25f);
-                    punto.setIcon(getResources().getDrawable(R.drawable.marker_punto));
-                    map.getOverlays().add(punto);
-                }
-
-
-                controllore.setZoom(14);
-                controllore.setCenter(new GeoPoint(wayPoints.get(6)));
-
-                //********   CLICK LISTENERS   ***********//
-
-                textPuntoSelezionato.setText("...");
-                btnIndietro.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        myLocationNewOverlay.disableFollowLocation();
-                        if(puntoAttuale==0){
-                            puntoAttuale--;
-                        }
-                        if(puntoAttuale!=-1){
-                            puntoAttuale--;
-                            textPuntoSelezionato.setText("Punto " + (puntoAttuale+1));
-                            listaMarker.get(puntoAttuale).showInfoWindow();
-                            controllore.animateTo(listaMarker.get(puntoAttuale).getPosition());
-                        }
-                        if(puntoAttuale==-1){
-                            textPuntoSelezionato.setText("...");
-                            InfoWindow.closeAllInfoWindowsOn(map);
-                        }
-                    }
-                });
-
-                btnAvanti.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        myLocationNewOverlay.disableFollowLocation();
-                        if(puntoAttuale!=11){
-                            puntoAttuale++;
-                            textPuntoSelezionato.setText("Punto " + (puntoAttuale+1));
-                            listaMarker.get(puntoAttuale).showInfoWindow();
-                            controllore.animateTo(listaMarker.get(puntoAttuale).getPosition());
-                        }
-                        else{
-                            puntoAttuale=-1;
-                            textPuntoSelezionato.setText("...");
-                            InfoWindow.closeAllInfoWindowsOn(map);
-                        }
-                    }
-                });
-
-
-                fabPosition.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(myLocationNewOverlay.getMyLocation()!=null) {
-                            controllore.animateTo(myLocationNewOverlay.getMyLocation());
-                            myLocationNewOverlay.enableFollowLocation();
-                        }
-                        else
-                            Toast.makeText(getContext(),getResources().getText(R.string.pozizione_ancora_nulla),Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                fabPath.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        myLocationNewOverlay.disableFollowLocation();
-                        controllore.setZoom(14);
-                        controllore.animateTo(new GeoPoint(wayPoints.get(6)));
-
-                    }
-                });
-            }
-        });
+        textPuntoSelezionato = v.findViewById(R.id.textViewPuntoAttuale);
+        textPuntoSelezionato.setText("...");
+        offlineMap = v.findViewById(R.id.mapView);
+        offlineMap.init(getActivity(),this);
+        puntoAttuale=-1;
         return v;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(SAVED_ZOOM_LEVEL, map.getZoomLevel());
-        outState.putSerializable(SAVED_CENTER, (Serializable) map.getMapCenter());
+        /*outState.putInt(SAVED_ZOOM_LEVEL, map.getZoomLevel());
+        outState.putSerializable(SAVED_CENTER, (Serializable) map.getMapCenter());*/
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onPause() {
-        myLocationNewOverlay.disableMyLocation();
+        if(myLocationNewOverlay != null)
+            myLocationNewOverlay.disableMyLocation();
         super.onPause();
     }
 
@@ -268,6 +120,8 @@ public class MapFragment extends Fragment {
 
     @Override
     public void onResume() {
+        if(myLocationNewOverlay != null)
+            myLocationNewOverlay.enableMyLocation();
         super.onResume();
     }
 
@@ -275,4 +129,148 @@ public class MapFragment extends Fragment {
         puntoAttuale = nuovoPuntoAttuale;
     }
 
+    @Override
+    public void mapLoadSuccess(MapView mapView, MapUtils mapUtils) {
+        this.mapUtils = mapUtils;
+        this.map = mapUtils.getMap();
+        BoundingBox box = new BoundingBox(NORTH, EAST, SOUTH, WEST);
+        map.setScrollableAreaLimitDouble(box);
+        controllore = map.getController();
+        map.setMultiTouchControls(true);
+        map.setVisibility(View.VISIBLE);
+
+        provider = new GpsMyLocationProvider(getActivity().getBaseContext());
+        provider.addLocationSource(LocationManager.NETWORK_PROVIDER);
+        provider.setLocationUpdateMinTime(UPDATE_LOCATION_TIME);
+        mCopyrightOverlay = new CopyrightOverlay(getActivity());
+        myLocationNewOverlay = new MyLocationNewOverlay(provider,map);
+        myLocationNewOverlay.enableMyLocation();
+        myLocationNewOverlay.setDrawAccuracyEnabled(true);
+        map.getOverlays().add(mCopyrightOverlay);
+        map.getOverlays().add(myLocationNewOverlay);
+
+        ScaleBarOverlay mScaleBarOverlay = new ScaleBarOverlay(map);
+        mScaleBarOverlay.enableScaleBar();
+        map.getOverlays().add(mScaleBarOverlay);
+
+        // Disegno del percorso utilizzando il file gpx
+
+        Polyline line = new Polyline();
+        line.setColor(getResources().getColor(R.color.coloreAzzurroIcona));
+        line.setWidth(4.5f);
+        List<GeoPoint> pts = new ArrayList<>();
+        List<Location> puntiDelPercorso = GpxParser.decodeGPX("trkpt",getContext());
+
+        for(Location l : puntiDelPercorso){
+            pts.add(new GeoPoint(l.getLatitude(), l.getLongitude()));
+        }
+
+        line.setPoints(pts);
+        line.setVisible(true);
+        line.setGeodesic(true);
+        map.getOverlays().add(line);
+
+        Marker infopoint = new Marker(mapView);
+        infopoint.setInfoWindow(new MyInfoWindow(R.layout.bonuspack_bubble, map,
+                GeneraArrayPunti.getPUNTI()[0], this.getContext()));
+        infopoint.setIcon(getResources().getDrawable(R.drawable.marker_punto_blu));
+        infopoint.setPosition(new GeoPoint(46.092686, 12.281283));
+        infopoint.setInfoWindowAnchor(3f,0.25f);
+        map.getOverlays().add(infopoint);
+
+        // Disegno dei punti di interess lungo il percorso
+
+        final List<Location> wayPoints = GpxParser.decodeGPX("wpt", getContext());
+        listaMarker = new ArrayList<>();
+        for(int i=0; i<wayPoints.size();i++){
+            Marker punto = new Marker(mapView);
+            listaMarker.add(punto);
+            punto.setPosition(new GeoPoint(wayPoints.get(i).getLatitude(),wayPoints.get(i).getLongitude()));
+            if(i<13) {
+                punto.setOnMarkerClickListener(new MyOnClickMarkerListener
+                        (GeneraArrayPunti.getPUNTI()[i+1],textPuntoSelezionato));
+                punto.setRelatedObject(GeneraArrayPunti.getPUNTI()[i+1]);
+            }
+            punto.setInfoWindow(new MyInfoWindow
+                    (R.layout.bonuspack_bubble, map, (Punto)punto.getRelatedObject(),
+                            this.getContext()));
+            punto.setInfoWindowAnchor(3f,0.25f);
+            punto.setIcon(getResources().getDrawable(R.drawable.marker_punto));
+            map.getOverlays().add(punto);
+        }
+
+        setupClickListeners(mapView,wayPoints);
+        controllore.setCenter(new GeoPoint(wayPoints.get(6)));
+        controllore.setZoom(14);
+        //mapView.invalidate();
+    }
+
+    private void setupClickListeners(final MapView map, final List<Location> wayPoints){
+        btnIndietro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myLocationNewOverlay.disableFollowLocation();
+                if(puntoAttuale==0){
+                    puntoAttuale--;
+                }
+                if(puntoAttuale!=-1){
+                    puntoAttuale--;
+                    textPuntoSelezionato.setText("Punto " + (puntoAttuale+1));
+                    listaMarker.get(puntoAttuale).showInfoWindow();
+                    controllore.animateTo(listaMarker.get(puntoAttuale).getPosition());
+                }
+                if(puntoAttuale==-1){
+                    textPuntoSelezionato.setText("...");
+                    InfoWindow.closeAllInfoWindowsOn(map);
+                }
+            }
+        });
+
+        btnAvanti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myLocationNewOverlay.disableFollowLocation();
+                if(puntoAttuale!=11){
+                    puntoAttuale++;
+                    textPuntoSelezionato.setText("Punto " + (puntoAttuale+1));
+                    listaMarker.get(puntoAttuale).showInfoWindow();
+                    controllore.animateTo(listaMarker.get(puntoAttuale).getPosition());
+                }
+                else{
+                    puntoAttuale=-1;
+                    textPuntoSelezionato.setText("...");
+                    InfoWindow.closeAllInfoWindowsOn(map);
+                }
+            }
+        });
+
+
+        fabPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(myLocationNewOverlay.getMyLocation()!=null) {
+                    controllore.animateTo(myLocationNewOverlay.getMyLocation());
+                    myLocationNewOverlay.enableFollowLocation();
+                }
+                else
+                    Toast.makeText(getContext(),getResources().
+                            getText(R.string.pozizione_ancora_nulla),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        fabPath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myLocationNewOverlay.disableFollowLocation();
+                controllore.setZoom(14);
+                controllore.animateTo(new GeoPoint(wayPoints.get(6)));
+
+            }
+        });
+    }
+
+    @Override
+    public void mapLoadFailed(String ex) {
+
+    }
 }

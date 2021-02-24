@@ -33,7 +33,7 @@
         app:layout_constraintVertical_bias="0.985" />
 
     <!--suppress AndroidUnknownAttribute -->
-    <org.osmdroid.views.MapView
+    <egolabsapps.basicodemine.offlinemap.Views.OfflineMapView
         android:id="@+id/mapView"
         tileSource="Mapnik"
         android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintTop_toTopOf="parent"></org.osmdroid.views.MapView>
+        map:layout_constraintTop_toTopOf="parent"></egolabsapps.basicodemine.offlinemap.Views.OfflineMapView>
 
     <LinearLayout
         android:id="@+id/linearLayout2"

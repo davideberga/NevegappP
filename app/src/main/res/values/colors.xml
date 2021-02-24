@@ -159,7 +159,7 @@
     <color name="coloreDrawer">#aff7f7</color>
     <color name="coloreVarie">#d83333</color>
     <color name="coloreDescrizioni">#c7bee6</color>
-    <color name="coloreLinkEContatti">#b9e818</color>
+    <color name="coloreLinkEContatti">#FFA500</color>
     <color name="backgroundImages">#ECF0F1</color>
     <color name="colorTextImages">#2d2d2d</color>
     <color name="colorBackgroundText">#99000000</color>
@@ -167,5 +167,6 @@
     <color name="sfondoTutteFoto">#E3E4FA</color>
     <color name="sfondoTitolo">#99BDEDFF</color>
     <color name="sfondoFoto">#CFECEC</color>
-    <color name="coloreGalleria">#b3f2fa</color>
+    <color name="coloreGalleria">#2d2d2d</color>
+    <color name="coloreGalleriaTesto">#d4d4d4</color>
 </resources>

@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/coloreBarra"
         android:orientation="vertical"
         android:weightSum="20">
 
@@ -21,7 +22,7 @@
 
             <!-- Colonna 1 -->
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewDescrizioni"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
@@ -57,9 +58,9 @@
                         android:textStyle="bold" />
 
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewStoria"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -97,7 +98,7 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <!-- Colonna 2 -->
 
@@ -108,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewFlora"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -147,10 +148,10 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <!-- Colonna 2 -->
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewFauna"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
@@ -189,14 +190,14 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="165dp">
             <!-- Colonna 1 -->
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewGeologia"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
@@ -232,9 +233,9 @@
                         android:textStyle="bold" />
 
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewTurismo"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
@@ -273,7 +274,7 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
         </TableRow>
 
@@ -281,7 +282,7 @@
             android:layout_width="match_parent"
             android:layout_height="165dp">
             <!-- Colonna 1 -->
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewVarie"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
@@ -317,9 +318,9 @@
                         android:textStyle="bold" />
 
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewLinkEContatti"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
@@ -355,7 +356,7 @@
                         android:textStyle="bold" />
 
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
         </TableRow>
 
@@ -363,7 +364,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewGalleria"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -395,13 +396,13 @@
                         android:layout_gravity="center"
                         android:text="@string/galleria"
                         android:textAlignment="center"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/coloreGalleriaTesto"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
         </TableRow>
 
     </LinearLayout>

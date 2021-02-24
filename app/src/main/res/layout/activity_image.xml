@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/sfondo_frag_images"
     tools:context=".Activities.ImageActivity">
 
     <LinearLayout
@@ -22,8 +23,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
-                android:adjustViewBounds="true"
-                android:background="@color/backgroundImages" />
+                android:adjustViewBounds="true" />
 
             <TextView
                 android:id="@+id/myImageViewText_id"
@@ -41,14 +41,22 @@
 
             <Button
                 android:id="@+id/button_save_id"
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
+                android:layout_margin="20dp"
                 android:layout_height="50dp"
+                android:background="@drawable/button_shape_gallery"
+                android:textColor="@color/coloreGalleriaTesto"
+                android:paddingEnd="30dp"
+                android:paddingStart="30dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:onClick="save"
-                android:text="SALVA"
-                android:textSize="20dp"
-                android:textAppearance="@style/titoloPages"/>
+                android:text="Salva questa immagine"
+                android:textAppearance="@style/testoFormattato"
+                android:drawableEnd="@drawable/save_image_gallery"
+                android:textAlignment="textStart"
+                android:drawableTint="@color/coloreGalleriaTesto"
+                android:textStyle="bold"
+                android:textSize="15dp"/>
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

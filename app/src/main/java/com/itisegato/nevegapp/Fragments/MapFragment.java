@@ -1,18 +1,29 @@
 package com.itisegato.nevegapp.Fragments;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.BoundingBox;
@@ -36,6 +47,7 @@ import com.itisegato.nevegapp.GeneralClasses.MyOnClickMarkerListener;
 import com.itisegato.nevegapp.GeneralClasses.Punto;
 import com.itisegato.nevegapp.R;
 import com.itisegato.nevegapp.Utilities.GpxParser;
+import com.itisegato.nevegapp.Utilities.LocListener;
 
 import egolabsapps.basicodemine.offlinemap.Interfaces.MapListener;
 import egolabsapps.basicodemine.offlinemap.Utils.MapUtils;
@@ -68,6 +80,9 @@ public class MapFragment extends Fragment implements MapListener {
     protected Button btnIndietro;
     protected Button btnAvanti;
     protected FloatingActionButton fabPath;
+    protected TextView textNotifica;
+    protected LinearLayout layoutNotifica;
+    protected LocationManager locationManager;
 
     private static final String SAVED_ZOOM_LEVEL = "zoom";
     private static final String SAVED_CENTER = "center";
@@ -86,11 +101,13 @@ public class MapFragment extends Fragment implements MapListener {
         btnIndietro = v.findViewById(R.id.bottoneIndietro);
         btnAvanti = v.findViewById(R.id.bottoneAvanti);
         fabPath = v.findViewById(R.id.fabPath);
+        textNotifica = v.findViewById(R.id.textViewNotificaProssimità);
+        layoutNotifica = v.findViewById(R.id.llnp);
         textPuntoSelezionato = v.findViewById(R.id.textViewPuntoAttuale);
         textPuntoSelezionato.setText("...");
         offlineMap = v.findViewById(R.id.mapView);
-        offlineMap.init(getActivity(),this);
-        puntoAttuale=-1;
+        offlineMap.init(getActivity(), this);
+        puntoAttuale = -1;
         return v;
     }
 
@@ -103,13 +120,13 @@ public class MapFragment extends Fragment implements MapListener {
 
     @Override
     public void onPause() {
-        if(myLocationNewOverlay != null)
+        if (myLocationNewOverlay != null)
             myLocationNewOverlay.disableMyLocation();
         super.onPause();
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
     }
 
@@ -120,7 +137,7 @@ public class MapFragment extends Fragment implements MapListener {
 
     @Override
     public void onResume() {
-        if(myLocationNewOverlay != null)
+        if (myLocationNewOverlay != null)
             myLocationNewOverlay.enableMyLocation();
         super.onResume();
     }
@@ -129,6 +146,7 @@ public class MapFragment extends Fragment implements MapListener {
         puntoAttuale = nuovoPuntoAttuale;
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void mapLoadSuccess(MapView mapView, MapUtils mapUtils) {
         this.mapUtils = mapUtils;
@@ -140,14 +158,15 @@ public class MapFragment extends Fragment implements MapListener {
         map.setVisibility(View.VISIBLE);
 
         provider = new GpsMyLocationProvider(getActivity().getBaseContext());
-        provider.addLocationSource(LocationManager.NETWORK_PROVIDER);
+        provider.addLocationSource(LocationManager.GPS_PROVIDER);
         provider.setLocationUpdateMinTime(UPDATE_LOCATION_TIME);
         mCopyrightOverlay = new CopyrightOverlay(getActivity());
-        myLocationNewOverlay = new MyLocationNewOverlay(provider,map);
+        myLocationNewOverlay = new MyLocationNewOverlay(provider, map);
         myLocationNewOverlay.enableMyLocation();
         myLocationNewOverlay.setDrawAccuracyEnabled(true);
         map.getOverlays().add(mCopyrightOverlay);
         map.getOverlays().add(myLocationNewOverlay);
+
 
         ScaleBarOverlay mScaleBarOverlay = new ScaleBarOverlay(map);
         mScaleBarOverlay.enableScaleBar();
@@ -159,11 +178,12 @@ public class MapFragment extends Fragment implements MapListener {
         line.setColor(getResources().getColor(R.color.coloreAzzurroIcona));
         line.setWidth(4.5f);
         List<GeoPoint> pts = new ArrayList<>();
-        List<Location> puntiDelPercorso = GpxParser.decodeGPX("trkpt",getContext());
+        List<Location> puntiDelPercorso = GpxParser.decodeGPX("trkpt", getContext());
 
-        for(Location l : puntiDelPercorso){
+        for (Location l : puntiDelPercorso) {
             pts.add(new GeoPoint(l.getLatitude(), l.getLongitude()));
         }
+
 
         line.setPoints(pts);
         line.setVisible(true);
@@ -181,6 +201,10 @@ public class MapFragment extends Fragment implements MapListener {
         // Disegno dei punti di interess lungo il percorso
 
         final List<Location> wayPoints = GpxParser.decodeGPX("wpt", getContext());
+        locationManager=(LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                500,
+                1, new LocListener(textNotifica, layoutNotifica, wayPoints));
         listaMarker = new ArrayList<>();
         for(int i=0; i<wayPoints.size();i++){
             Marker punto = new Marker(mapView);

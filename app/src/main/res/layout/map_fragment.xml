@@ -53,6 +53,36 @@
         map:layout_constraintTop_toTopOf="parent"></egolabsapps.basicodemine.offlinemap.Views.OfflineMapView>
 
     <LinearLayout
+        android:id="@+id/llnp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sfondo_notifica_prossimita"
+        android:gravity="top|center_horizontal"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.051">
+
+        <TextView
+            android:id="@+id/textViewNotificaProssimità"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:text="Caricamento ..."
+            android:textSize="15sp"
+            android:textColor="@color/WhiteSmoke"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/pomegranate"
-            android:text="TextView" />
+            android:text="Caricamento" />
 
         <Button
             android:id="@+id/bottoneAvanti"

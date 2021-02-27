@@ -160,11 +160,10 @@ public class MapFragment extends Fragment implements MapListener {
         provider = new GpsMyLocationProvider(getActivity().getBaseContext());
         provider.addLocationSource(LocationManager.GPS_PROVIDER);
         provider.setLocationUpdateMinTime(UPDATE_LOCATION_TIME);
-        mCopyrightOverlay = new CopyrightOverlay(getActivity());
+        mCopyrightOverlay = new CopyrightOverlay(getContext());
         myLocationNewOverlay = new MyLocationNewOverlay(provider, map);
         myLocationNewOverlay.enableMyLocation();
         myLocationNewOverlay.setDrawAccuracyEnabled(true);
-        map.getOverlays().add(mCopyrightOverlay);
         map.getOverlays().add(myLocationNewOverlay);
 
 
@@ -226,6 +225,7 @@ public class MapFragment extends Fragment implements MapListener {
         setupClickListeners(mapView,wayPoints);
         controllore.setCenter(new GeoPoint(wayPoints.get(6)));
         controllore.setZoom(14);
+        map.getOverlays().add(mCopyrightOverlay);
         //mapView.invalidate();
     }
 

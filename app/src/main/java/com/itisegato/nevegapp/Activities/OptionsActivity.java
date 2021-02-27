@@ -35,9 +35,6 @@ public class OptionsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Switch del contenuto in base al pulsante cliccato
-     */
     private void selezionaContenuto(){
         if(getIntent().getStringExtra(MainActivity.SECTION).equals(MainActivity.CREDITI)){
             ((TextView) findViewById(R.id.testoOpzioni)).

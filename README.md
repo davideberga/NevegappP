@@ -6,7 +6,7 @@ Alla gestione e supervisione del progetto hanno partecipato anche le professores
 
 ## L'applicazione
 
-In questa repository è possibile trovare il codice sorgente dell'applicazione creata dagli sviluppatori (Davide bergamasco e Massimo Stefan), scritta nel 2018 (4° superiore). Attualmente (1 marzo 2020)  la release finale (revisionata a Novembre 2019) dell'applicazione è disponibile, per dispositivi con *SO Android (>= SDK 2)*, su **Play Store** a questo link [Nevegapp](https://play.google.com/store/apps/details?id=itisegato.com.nevegapptemp "Nevegapp").
+In questa repository è possibile trovare il codice sorgente dell'applicazione creata dagli sviluppatori (Davide bergamasco e Massimo Stefan), scritta nel 2018 (4° superiore). Attualmente (1 marzo 2020)  la release finale dell'applicazione è disponibile, per dispositivi con *SO Android (>= SDK 2)*, su **Play Store** a questo link [Nevegapp](https://play.google.com/store/apps/details?id=itisegato.com.nevegapptemp "Nevegapp").
 
 ## Revisione 01-03-2021
 

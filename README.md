@@ -19,9 +19,9 @@ Questa revisione è stata motivata principalmente dalla nuove policies per gli s
 
 Lo sviluppo iniziale dell'applicazione è avvenuto fra Novembre 2017 e aprile 2018. 
 Strumenti di sviluppo:
-   *SO Windows e distro Linux
-   *Android Studio
-   *Software per disegnare il mock-up dell'applicazione
+   - SO Windows e distro Linux
+   - Android Studio
+   - Software per disegnare il mock-up dell'applicazione
 Inizialmente Nevgapp supportava SO Android con SDK >= 21, ora supporta SDK >= 29 (obbligatorio su Playstore) 
 
 ## La repo

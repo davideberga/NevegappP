@@ -28,6 +28,7 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.CopyrightOverlay;
 import org.osmdroid.views.overlay.Marker;
@@ -120,8 +121,7 @@ public class MapFragment extends Fragment implements MapListener {
 
     @Override
     public void onPause() {
-        if (myLocationNewOverlay != null)
-            myLocationNewOverlay.disableMyLocation();
+        myLocationNewOverlay.disableMyLocation();
         super.onPause();
     }
 
@@ -155,6 +155,7 @@ public class MapFragment extends Fragment implements MapListener {
         map.setScrollableAreaLimitDouble(box);
         controllore = map.getController();
         map.setMultiTouchControls(true);
+        mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
         map.setVisibility(View.VISIBLE);
 
         provider = new GpsMyLocationProvider(getActivity().getBaseContext());

@@ -22,6 +22,7 @@ Strumenti di sviluppo:
    - SO Windows e distro Linux
    - Android Studio
    - Software per disegnare il mock-up dell'applicazione
+
 Inizialmente Nevgapp supportava SO Android con SDK >= 21, ora supporta SDK >= 29 (obbligatorio su Playstore) 
 
 ## La repo

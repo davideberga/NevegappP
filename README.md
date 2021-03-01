@@ -9,10 +9,20 @@ Alla gestione e supervisione del progetto hanno partecipato anche le professores
 In questa repository è possibile trovare il codice sorgente dell'applicazione creata dagli sviluppatori (Davide bergamasco e Massimo Stefan), scritta nel 2018 (4° superiore). Attualmente (1 marzo 2020)  la release finale (revisionata a Novembre 2019) dell'applicazione è disponibile, per dispositivi con *SO Android (>= SDK 2)*, su **Play Store** a questo link [Nevegapp](https://play.google.com/store/apps/details?id=itisegato.com.nevegapptemp "Nevegapp").
 
 ## Revisione 01-03-2021
+
 Nella release di marzo 2021 è stata modificata la mappa, che viene ora caricata direttamente dallo storage locale: in modo da non
 necessitare della connessione ad internet. È stata aggiunta una notifica di prossimità ai punti di interesse.
 Questa revisione è stata motivata principalmente dalla nuove policies per gli sviluppatori android riguardo l'accesso
 ,in backgroud, alla posizione gps. Ora Nevegapp rispetta il nuovo regolamento.
+
+## Alcune info sullo sviluppo
+
+Lo sviluppo iniziale dell'applicazione è avvenuto fra Novembre 2017 e aprile 2018. 
+Strumenti di sviluppo:
+    - SO Windows e distro Linux
+    - Android Studio
+    - Software per disegnare il mock-up dell'applicazione
+Inizialmente Nevgapp supportava SO Android con SDK >= 21, ora supporta SDK >= 29 (obbligatorio su Playstore) 
 
 ## La repo
 
